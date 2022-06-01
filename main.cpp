@@ -55,24 +55,6 @@ int walk(int k)
     {
         Direction direction;
 
-        /*switch (rand() % 4)
-        {
-        case 0:
-            direction = Direction::Up;
-            break;
-
-        case 1:
-            direction = Direction::Down;
-            break;
-
-        case 2:
-            direction = Direction::Left;
-            break;
-
-        default:
-            direction = Direction::Right;
-            break;
-        }*/
         int k;//k - куда смотрят глаза
         //std::cout<<"do:k="<<k<<std::endl; - для отладки
         //использую правило правой руки(идти вперёд по направлению правой руки, подробнее в самой программе)
@@ -115,7 +97,7 @@ int main()
     std::cin>>rezhim;
     std::cout<<"How many turns do you need?";
     std::cin>>turn;
-    switch (rezhim)
+   switch (rezhim)
             {case 1:
                     if (const int turns = walk(turn)) {
                         std::cout << "Found in " << turns << " turns" << std::endl;
@@ -126,12 +108,12 @@ int main()
                 case 2: generator();
 
                 while (const int turns = walk(turn)) {
-                    if (turns <= turn) {std::cout << "Found in " << turns << " turns" << std::endl;}
+                    if (turns <= turn) {std::cout << "Found in " << turns << " turns" << std::endl; break;}
                     else {std::cout << "Not found. Creating new map." << std::endl;}
+                    generator();
                 }
-                generator();
-                break;}
-
+                break;
+                }
 
     return 0;
 }
