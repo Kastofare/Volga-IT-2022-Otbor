@@ -1,8 +1,3 @@
-#include "fairy_tail.hpp"
-
-#include <cstdlib>
-#include <ctime>
-
 void generator(char v[10][10])//в этой функции создаётся карта местности
 {
     std::ofstream file;
@@ -51,38 +46,49 @@ void generator(char v[10][10])//в этой функции создаётся к
             //std::cout << c;
             v[i][j] = c;
         }
-    //std::cout<<std::endl;
+    file<<std::endl;
     }
 file.close();
 }
 
-int walk(int k)//в этой функции определяется, как идёт Иван
+int walk(int sch)//в этой функции определяется, как идёт Иван
 {
     Fairyland world;
 
-    for (int i = 0; i < k; ++i)
+    for (int i = 0; i < sch; ++i)
     {
         Direction direction;
 
-        int k;//k - куда смотрят глаза
+        int k;//k - куда смотрят глаза Ивана
         //std::cout<<"do:k="<<k<<std::endl;
-        //использую правило правой руки(идти вперёд по направлению правой руки, подробнее в самой программе)
-        /*k=1;//правая рука направлена влево (человек смотрит вниз и по возможности идёт вниз)
-        k=2;//правая рука направлена вниз (человек смотрит вправо и по возможности идёт вправо)
-        k=3;//правая рука направлена вправо (человек смотрит вверх и по возможности идёт вверх)
-        k=4;//правая рука направлена вверх (человек смотрит влево и по возможности идёт влево)
-        k=5,6;//дополнительные состояния*/
+        //использую правило левой руки(идти вперёд по направлению левой руки, подробнее в самой программе)
+        /*k=1;//левая рука направлена вправо (человек смотрит вниз и по возможности идёт вниз)
+        k=2;//левая рука направлена вверх (человек смотрит вправо и по возможности идёт вправо)
+        k=3;//левая рука направлена влево (человек смотрит вверх и по возможности идёт вверх)
+        k=4;//левая рука направлена вниз (человек смотрит влево и по возможности идёт влево)
+        k=5,6;//дополнительные состояния - для выхода из "тупика"
+         если k!=1,2,3,4,5,6;*/
         for (int s=0;s<1;s++) {
            
         if (!(world.canGo(Character::Ivan, Direction::Left))&&(!(world.canGo(Character::Ivan, Direction::Up)))&&(!(world.canGo(Character::Ivan, Direction::Right)))) {k=1; break;}
         if (!(world.canGo(Character::Ivan, Direction::Left))&&(!(world.canGo(Character::Ivan, Direction::Up)))&&((world.canGo(Character::Ivan, Direction::Right)))&&(k==6)) {k=1; break;}
         if (!(world.canGo(Character::Ivan, Direction::Left))&&(!(world.canGo(Character::Ivan, Direction::Up)))&&(world.canGo(Character::Ivan, Direction::Right))) {k=2; break;}
+        if (!(world.canGo(Character::Ivan, Direction::Down))&&(world.canGo(Character::Ivan, Direction::Left))&&(!(world.canGo(Character::Ivan, Direction::Up)))&&(!(world.canGo(Character::Ivan, Direction::Right)))&&(k==2)) {k=6; break;}
+        if (!(world.canGo(Character::Ivan, Direction::Down))&&!(world.canGo(Character::Ivan, Direction::Left))&&((world.canGo(Character::Ivan, Direction::Up)))&&(!(world.canGo(Character::Ivan, Direction::Right)))) {k=3; break;}
+
+        if (!(world.canGo(Character::Ivan, Direction::Down))&&(world.canGo(Character::Ivan, Direction::Left))&&(!(world.canGo(Character::Ivan, Direction::Up)))&&(!(world.canGo(Character::Ivan, Direction::Right)))) {k=6; break;}
+
         if ((world.canGo(Character::Ivan, Direction::Left))&&(!(world.canGo(Character::Ivan, Direction::Up)))&&(!(world.canGo(Character::Ivan, Direction::Right)))) {k=1; break;}
         if (!(world.canGo(Character::Ivan, Direction::Right))&&!(world.canGo(Character::Ivan, Direction::Down))&&(world.canGo(Character::Ivan, Direction::Left))&&(k==1)) {k=6; break;}
+        if ((world.canGo(Character::Ivan, Direction::Left))&&((world.canGo(Character::Ivan, Direction::Right)))&&((world.canGo(Character::Ivan, Direction::Down)))&&(k==6)) {k=1; break;}
+        if (!(world.canGo(Character::Ivan, Direction::Left))&&((world.canGo(Character::Ivan, Direction::Right)))&&((world.canGo(Character::Ivan, Direction::Down)))&&(k==6)) {k=1; break;}
+        if ((world.canGo(Character::Ivan, Direction::Right))&&!(world.canGo(Character::Ivan, Direction::Left))&&(k==1)) {k=5; break;}
+        if (!(world.canGo(Character::Ivan, Direction::Down))&&(!(world.canGo(Character::Ivan, Direction::Up)))&&(!(world.canGo(Character::Ivan, Direction::Right)))) {k=6; break;}
+        if (k==4 && !(world.canGo(Character::Ivan, Direction::Down))&&!(world.canGo(Character::Ivan, Direction::Left))&&((world.canGo(Character::Ivan, Direction::Up)))&&(k==4)) {k=3; break;}
 
 
         if (!(world.canGo(Character::Ivan, Direction::Down))&&(k==1)) {k=2; break;}
-        if (!(world.canGo(Character::Ivan, Direction::Right))&&(k==2)) {k=3; break;}
+        if (!(world.canGo(Character::Ivan, Direction::Right))&&((k==2)||(k==5))) {k=3; break;}
         if (!(world.canGo(Character::Ivan, Direction::Up))&&(k==3)) {k=4; break;}
 
 
@@ -131,7 +137,7 @@ int main()
                     int sch = 0;
                     while (sch==0) {//проверка карты
                     if (const int turns = walk(turn)) {
-                    std::cout << "Found in " << turns << " turns" << std::endl;
+                    //std::cout << "Found in " << turns << " turns" << std::endl;
                     sch=1;
                     for (int i=0; i<10; i++) {
                        for (int j=0; j<10; j++){
@@ -147,4 +153,3 @@ int main()
 
     return 0;
 }
-
